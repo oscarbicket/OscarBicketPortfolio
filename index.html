@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oscar Bicket — Digital Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,700;1,900&family=Barlow:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+
+    /* ── Reset & base ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* ── Tokens ── */
+    :root {
+      --bg:       #f4f0e6;
+      --bg2:      #ede9dd;
+      --bgdark:   #15192e;
+      --bgcard:   #f8f4ea;
+      --text:     #151520;
+      --mid:      #555568;
+      --muted:    #9090a8;
+      --border:   rgba(21,21,32,0.1);
+      --bdark:    rgba(244,240,230,0.1);
+
+      --crimson:  #c41230;
+      --navy:     #1a2050;
+      --amber:    #b87020;
+      --teal:     #1a6e64;
+      --violet:   #6a3f80;
+
+      --oqs: var(--crimson);
+      --pe:  var(--navy);
+      --fn:  var(--amber);
+      --po:  var(--teal);
+      --ow:  var(--violet);
+    }
+
+    /* ── Progress bar ── */
+    #bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0;
+      background: var(--crimson);
+      z-index: 1001;
+      transition: width .08s linear;
+      pointer-events: none;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      transition: background .3s, border-color .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.stuck {
+      background: rgba(244,240,230,.96);
+      backdrop-filter: blur(18px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-badge {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      background: var(--crimson);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .nav-wordmark {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: .95rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Barlow', sans-serif;
+      font-size: .84rem; font-weight: 500; letter-spacing: .04em;
+      color: rgba(244,240,230,.72); text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.on { color: rgba(244,240,230,.98); }
+    nav.stuck .nav-logo { color: var(--text); }
+    nav.stuck .nav-links a { color: var(--mid); }
+    nav.stuck .nav-links a:hover,
+    nav.stuck .nav-links a.on { color: var(--text); }
+
+    /* ── Layout ── */
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: flex-end; justify-content: flex-start;
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(84,170,255,.14), transparent 28%),
+        radial-gradient(circle at 78% 22%, rgba(196,18,48,.12), transparent 24%),
+        radial-gradient(circle at 50% 78%, rgba(255,255,255,.05), transparent 36%),
+        linear-gradient(180deg, #0d1327 0%, #15192e 52%, #0b1020 100%);
+    }
+    .hero-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,.06), transparent 34%),
+        linear-gradient(180deg, rgba(21,25,46,.1) 0%, rgba(21,25,46,.72) 100%);
+    }
+    .hero-grid { display: none; }
+    .hero-tech {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .hero-grid-lines,
+    .hero-grid-lines::before {
+      position: absolute;
+      inset: -10%;
+      content: '';
+      background-repeat: repeat;
+    }
+    .hero-grid-lines {
+      opacity: .18;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 88px 88px;
+      transform: perspective(900px) rotateX(72deg) translateY(28%);
+      transform-origin: center top;
+      animation: heroGridDrift 24s linear infinite;
+    }
+    .hero-grid-lines::before {
+      background-image:
+        linear-gradient(rgba(84,170,255,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(84,170,255,.1) 1px, transparent 1px);
+      background-size: 176px 176px;
+      opacity: .45;
+      mix-blend-mode: screen;
+      animation: heroGridPulse 8s ease-in-out infinite;
+    }
+    /* ── Hero multiview console ── */
+    .hero-console {
+      position: absolute;
+      top: 12%;
+      right: 5%;
+      width: min(42vw, 560px);
+      perspective: 1500px;
+    }
+    .hero-console-inner {
+      position: relative;
+      transform: rotateX(5deg) rotateY(-9deg);
+      background: rgba(9,14,30,.58);
+      border: 1px solid rgba(120,183,255,.18);
+      border-radius: 6px;
+      box-shadow:
+        0 34px 90px rgba(0,0,0,.46),
+        inset 0 0 70px rgba(84,170,255,.05);
+      overflow: hidden;
+      animation: heroConsoleFloat 9s ease-in-out infinite;
+    }
+    .hero-console-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,.045) 0 1px, transparent 1px 4px);
+      opacity: .5;
+    }
+    .hero-console-inner::after {
+      content: '';
+      position: absolute;
+      inset: -40% -70%;
+      z-index: 6;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,.07) 50%, transparent 58%);
+      animation: hcSheen 8s ease-in-out infinite;
+    }
+    .hero-console-head {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      padding: .5rem .85rem .45rem;
+      border-bottom: 1px solid rgba(120,183,255,.15);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(244,240,230,.62);
+    }
+    .hero-console-head .hc-title { color: rgba(120,183,255,.85); }
+    .hc-rec {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      color: rgba(244,240,230,.85);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .1em;
+    }
+    .hc-rec-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ff4d5e;
+      box-shadow: 0 0 10px rgba(255,77,94,.85);
+      animation: hcBlink 1.2s steps(2, start) infinite;
+    }
+    .hero-console-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(120,183,255,.13);
+    }
+    .hc-tile {
+      position: relative;
+      aspect-ratio: 16 / 10.5;
+      background: linear-gradient(180deg, #0e1530, #0a0f23);
+      overflow: hidden;
+    }
+    .hc-label {
+      position: absolute;
+      left: .55rem;
+      bottom: .42rem;
+      z-index: 3;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: .63rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(244,240,230,.88);
+    }
+    .hc-label::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #78b7ff;
+      box-shadow: 0 0 8px rgba(120,183,255,.85);
+      margin-right: .35rem;
+      vertical-align: 1.5px;
+    }
+    /* Tile 1 — Videos */
+    .hc-footage {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, #16264f, #0c1430 36%, #1d2f60 62%, #0d1736);
+      background-size: 240% 100%;
+      animation: hcPan 8s ease-in-out infinite alternate;
+    }
+    .hc-play {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 28px;
+      height: 28px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(6,10,24,.55);
+      border: 1px solid rgba(255,255,255,.32);
+    }
+    .hc-play::after {
+      content: '';
+      position: absolute;
+      left: 56%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-left: 8px solid rgba(255,255,255,.92);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .hc-scrub {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: 27%;
+      height: 3px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.14);
+    }
+    .hc-scrub::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      right: auto;
+      width: 30%;
+      border-radius: inherit;
+      background: #78b7ff;
+      box-shadow: 0 0 9px rgba(120,183,255,.7);
+      animation: hcScrub 7s linear infinite;
+    }
+    /* Tile 2 — Livestreams */
+    .hc-live-badge {
+      position: absolute;
+      top: .5rem;
+      left: .55rem;
+      z-index: 3;
+      padding: .16rem .45rem .1rem;
+      background: #c41230;
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: .6rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      animation: hcLivePulse 2.4s ease-in-out infinite;
+    }
+    .hc-vu {
+      position: absolute;
+      left: 16%;
+      right: 16%;
+      bottom: 25%;
+      height: 44%;
+      display: flex;
+      align-items: flex-end;
+      gap: 9%;
+    }
+    .hc-vu span {
+      flex: 1;
+      height: 100%;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(180deg, #ff5d6e, #f5c146 30%, #36e3a0 60%);
+      transform-origin: bottom;
+      transform: scaleY(.3);
+      animation: hcVu 1s ease-in-out infinite;
+    }
+    .hc-vu span:nth-child(1) { animation-duration: .92s; animation-delay: -.18s; }
+    .hc-vu span:nth-child(2) { animation-duration: .74s; animation-delay: -.42s; }
+    .hc-vu span:nth-child(3) { animation-duration: 1.06s; animation-delay: -.07s; }
+    .hc-vu span:nth-child(4) { animation-duration: .66s; animation-delay: -.3s; }
+    .hc-vu span:nth-child(5) { animation-duration: .86s; animation-delay: -.55s; }
+    /* Tile 3 — Studio (mini 3D room) */
+    .hc-t-studio { perspective: 420px; }
+    .hc-room {
+      position: absolute;
+      left: 50%;
+      top: 44%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      animation: hcRoomSpin 14s linear infinite;
+    }
+    .hc-room i {
+      position: absolute;
+      left: -26px;
+      top: -14px;
+      width: 52px;
+      height: 28px;
+      border: 1px solid rgba(120,183,255,.6);
+      background: rgba(120,183,255,.07);
+      box-shadow: inset 0 0 10px rgba(120,183,255,.12);
+    }
+    .hc-room .hc-rw1 { transform: rotateY(0deg) translateZ(-26px); }
+    .hc-room .hc-rw2 { transform: rotateY(90deg) translateZ(-26px); }
+    .hc-room .hc-rw3 { transform: rotateY(180deg) translateZ(-26px); }
+    .hc-room .hc-rw4 { transform: rotateY(270deg) translateZ(-26px); }
+    .hc-room .hc-rfloor {
+      left: -26px;
+      top: -26px;
+      width: 52px;
+      height: 52px;
+      transform: rotateX(90deg) translateZ(-14px);
+      background: rgba(120,183,255,.11);
+      border-color: rgba(120,183,255,.42);
+    }
+    /* Tile 4 — Social media */
+    .hc-bars {
+      position: absolute;
+      left: 15%;
+      right: 26%;
+      bottom: 25%;
+      height: 46%;
+      display: flex;
+      align-items: flex-end;
+      gap: 11%;
+    }
+    .hc-bars span {
+      flex: 1;
+      height: 100%;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(180deg, #78b7ff, #3d63c2);
+      transform-origin: bottom;
+      transform: scaleY(.1);
+      animation: hcGrow 4.4s cubic-bezier(.25,.8,.25,1) infinite;
+    }
+    .hc-bars span:nth-child(1) { --g: .45; }
+    .hc-bars span:nth-child(2) { --g: .66; animation-delay: .12s; }
+    .hc-bars span:nth-child(3) { --g: .82; animation-delay: .24s; }
+    .hc-bars span:nth-child(4) { --g: 1; animation-delay: .36s; }
+    .hc-pip {
+      position: absolute;
+      right: 16%;
+      bottom: 32%;
+      z-index: 2;
+      font-size: .68rem;
+      color: #ff6b7d;
+      text-shadow: 0 0 8px rgba(255,107,125,.6);
+      opacity: 0;
+      animation: hcPipRise 3.2s ease-out infinite;
+    }
+    .hc-pip2 { right: 24%; animation-delay: 1.7s; font-size: .54rem; }
+    /* Tile 5 — Media (waveform) */
+    .hc-wave {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 28%;
+      bottom: 28%;
+      display: flex;
+      align-items: center;
+      gap: 6%;
+    }
+    .hc-wave span {
+      flex: 1;
+      height: 100%;
+      border-radius: 99px;
+      background: rgba(244,240,230,.55);
+      transform: scaleY(.18);
+      animation: hcWave 1.5s ease-in-out infinite;
+    }
+    .hc-wave span:nth-child(1) { animation-delay: -.1s; }
+    .hc-wave span:nth-child(2) { animation-delay: -.55s; }
+    .hc-wave span:nth-child(3) { animation-delay: -.95s; }
+    .hc-wave span:nth-child(4) { animation-delay: -.3s; }
+    .hc-wave span:nth-child(5) { animation-delay: -.7s; }
+    .hc-wave span:nth-child(6) { animation-delay: -1.2s; }
+    .hc-wave span:nth-child(7) { animation-delay: -.45s; }
+    .hc-wave span:nth-child(8) { animation-delay: -.85s; }
+    .hc-wave span:nth-child(9) { animation-delay: -.2s; }
+    /* Tile 6 — On air */
+    .hc-onair {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      padding: .42rem .9rem .34rem;
+      border: 1px solid rgba(255,77,94,.55);
+      border-radius: 3px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: #ff93a0;
+      background: rgba(255,77,94,.08);
+      text-shadow: 0 0 16px rgba(255,77,94,.65);
+      animation: hcOnAir 3.2s ease-in-out infinite;
+    }
+    @media (max-width: 820px) {
+      .hero-console {
+        top: 9.5%;
+        right: 4%;
+        width: min(58vw, 460px);
+      }
+    }
+    @media (max-width: 520px) {
+      .hero-console {
+        top: 7%;
+        right: 6%;
+        width: 84vw;
+        opacity: .95;
+      }
+      .hero-console-head { font-size: .58rem; gap: .55rem; }
+      .hc-label { font-size: .54rem; letter-spacing: .12em; }
+      /* Single row on small phones so the console clears the headline */
+      .hc-t-social, .hc-t-media, .hc-t-onair { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-console-inner, .hero-console-inner::after,
+      .hc-rec-dot, .hc-live-badge, .hc-footage, .hc-scrub::before,
+      .hc-vu span, .hc-room, .hc-bars span, .hc-pip, .hc-wave span, .hc-onair {
+        animation: none;
+      }
+      .hc-pip { opacity: .8; }
+      .hc-bars span { transform: scaleY(var(--g, 1)); }
+      .hc-vu span { transform: scaleY(.55); }
+      .hc-wave span { transform: scaleY(.5); }
+    }
+    .hero-camera-frame {
+      position: absolute;
+      inset: 3.5rem 4rem 5rem;
+      border: 1px solid rgba(244,240,230,.08);
+      opacity: .45;
+    }
+    .hero-camera-frame::before,
+    .hero-camera-frame::after {
+      content: '';
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(244,240,230,.14);
+    }
+    .hero-camera-frame::before {
+      top: -1px;
+      left: -1px;
+      border-right: 0;
+      border-bottom: 0;
+    }
+    .hero-camera-frame::after {
+      right: -1px;
+      bottom: -1px;
+      border-left: 0;
+      border-top: 0;
+    }
+    @keyframes heroGridDrift {
+      from { transform: perspective(900px) rotateX(72deg) translateY(28%) translateX(0); }
+      to { transform: perspective(900px) rotateX(72deg) translateY(28%) translateX(-44px); }
+    }
+    @keyframes heroGridPulse {
+      0%, 100% { opacity: .22; }
+      50% { opacity: .48; }
+    }
+    @keyframes heroConsoleFloat {
+      0%, 100% { transform: rotateX(5deg) rotateY(-9deg) translateY(0); }
+      50% { transform: rotateX(5deg) rotateY(-9deg) translateY(-9px); }
+    }
+    @keyframes hcSheen {
+      0%, 55% { transform: translateX(-55%); }
+      85%, 100% { transform: translateX(55%); }
+    }
+    @keyframes hcBlink {
+      50% { opacity: .25; }
+    }
+    @keyframes hcLivePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,18,48,.5); }
+      45% { box-shadow: 0 0 14px 2px rgba(196,18,48,.55); }
+    }
+    @keyframes hcPan {
+      from { background-position: 0% 50%; }
+      to { background-position: 100% 50%; }
+    }
+    @keyframes hcScrub {
+      from { width: 4%; }
+      to { width: 96%; }
+    }
+    @keyframes hcVu {
+      0%, 100% { transform: scaleY(.22); }
+      30% { transform: scaleY(.94); }
+      55% { transform: scaleY(.42); }
+      78% { transform: scaleY(.7); }
+    }
+    @keyframes hcRoomSpin {
+      from { transform: rotateX(-26deg) rotateY(0deg); }
+      to { transform: rotateX(-26deg) rotateY(360deg); }
+    }
+    @keyframes hcGrow {
+      0% { transform: scaleY(.08); }
+      55% { transform: scaleY(var(--g, 1)); }
+      84% { transform: scaleY(var(--g, 1)); }
+      100% { transform: scaleY(.08); }
+    }
+    @keyframes hcPipRise {
+      0% { opacity: 0; transform: translateY(4px) scale(.7); }
+      18% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-26px) scale(1.15); }
+    }
+    @keyframes hcWave {
+      0%, 100% { transform: scaleY(.16); }
+      50% { transform: scaleY(.9); }
+    }
+    @keyframes hcOnAir {
+      0%, 100% { opacity: .65; }
+      50% { opacity: 1; }
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      text-align: left;
+      padding: 0 2.5rem 5.75rem;
+      width: min(1160px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .96rem; font-weight: 700;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(244,240,230,.88); margin-bottom: 1.55rem;
+    }
+    h1.hero-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-style: italic;
+      font-size: clamp(3.75rem, 7.2vw, 6.45rem);
+      font-weight: 700;
+      line-height: .93;
+      letter-spacing: -.014em;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      margin-left: -.02em;
+      max-width: 7ch;
+      text-shadow: 0 8px 18px rgba(5,10,24,.14);
+    }
+    .hero-word-oscar,
+    .hero-word-bicket {
+      display: block;
+      transform: translateX(0);
+      animation: heroWordFloat 6.5s ease-in-out infinite;
+      text-rendering: geometricPrecision;
+    }
+    .hero-word-oscar { color: #f8f4ea; }
+    .hero-word-bicket {
+      color: #78b7ff;
+      animation-delay: .8s;
+    }
+    .hero-sub {
+      font-size: clamp(1.26rem, 1.7vw, 1.5rem);
+      color: rgba(244,240,230,.82);
+      font-weight: 400;
+      max-width: 35rem;
+      margin-bottom: 2.45rem;
+      line-height: 1.55;
+    }
+    .hero-tags { display: flex; gap: .55rem; justify-content: flex-start; flex-wrap: wrap; }
+    .hero-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .74rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .42rem .9rem;
+      border: 1px solid rgba(244,240,230,.22);
+      border-radius: 2px;
+      color: rgba(244,240,230,.9);
+      background: rgba(244,240,230,.04);
+    }
+    @keyframes heroWordFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -6px, 0); }
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      font-size: .625rem; letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(244,240,230,.72);
+      animation: bob 2.4s ease-in-out infinite;
+    }
+    .scroll-hint svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+    @keyframes bob {
+      0%,100% { opacity: .4; transform: translateX(-50%) translateY(0); }
+      50%      { opacity: .9; transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Chapter shell ── */
+    .chapter { padding-bottom: 5rem; }
+    .ch-intro {
+      position: relative;
+      padding: 7rem 0 3.5rem;
+    }
+    .ch-intro::before {
+      content: attr(data-chapter);
+      position: absolute;
+      top: 1.5rem;
+      right: 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: min(12vw, 8rem);
+      font-weight: 900;
+      line-height: .8;
+      letter-spacing: -.04em;
+      color: color-mix(in srgb, var(--ca, var(--crimson)) 100%, transparent);
+      opacity: .06;
+      pointer-events: none;
+    }
+    .ch-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .76rem; font-weight: 700;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--ca, var(--crimson)); margin-bottom: 1rem;
+    }
+    .ch-rule { width: 34px; height: 2px; background: var(--ca, var(--crimson)); margin-bottom: 1rem; }
+    .ch-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.9rem, 4.5vw, 3.25rem);
+      font-weight: 600; line-height: 1.14;
+      max-width: 640px;
+    }
+    .ch-desc { margin-top: 1rem; font-size: 1rem; color: var(--mid); max-width: 500px; line-height: 1.85; }
+    .ch-intro.no-watermark::before {
+      display: none;
+    }
+    .ch-intro-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 3rem;
+      align-items: start;
+    }
+    .ch-brand-rail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .9rem;
+      gap: .9rem;
+      padding-top: .35rem;
+      align-items: stretch;
+    }
+    .brand-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: var(--bg);
+      padding: 1rem 1.1rem;
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: brandFloat 7s ease-in-out infinite;
+    }
+    .brand-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 34%, rgba(255,255,255,.55) 50%, transparent 66%);
+      opacity: .22;
+      transform: translateX(-135%);
+      animation: brandSheen 8.5s ease-in-out infinite;
+    }
+    .brand-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 56px;
+      object-fit: contain;
+      object-position: center;
+      position: relative;
+      z-index: 1;
+    }
+    .brand-card-oqs {
+      grid-column: 1 / -1;
+      min-height: 98px;
+    }
+    .brand-card-oqs img {
+      max-height: 62px;
+    }
+    .brand-card-spectator img {
+      max-height: 54px;
+    }
+    .brand-card-unherd img {
+      max-height: 52px;
+    }
+    .brand-card-spectator { animation-delay: .7s; }
+    .brand-card-unherd { animation-delay: 1.3s; }
+    @keyframes brandFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes brandSheen {
+      0%, 100% { transform: translateX(-135%); opacity: 0; }
+      18% { opacity: .16; }
+      50% { transform: translateX(135%); opacity: .24; }
+      70% { opacity: 0; }
+    }
+
+    /* chapter accent vars */
+    .c-oqs { --ca: var(--oqs); }
+    .c-pe  { --ca: var(--pe);  }
+    .c-fn  { --ca: var(--fn);  }
+    .c-po  { --ca: var(--po);  }
+    .c-ow  { --ca: var(--ow);  }
+
+    /* ── Project block ── */
+    .project { padding: 3.75rem 0; border-top: 1px solid var(--border); }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .two.flip { direction: rtl; }
+    .two.flip > * { direction: ltr; }
+
+    .p-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .76rem; font-weight: 700;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--ca, var(--crimson)); margin-bottom: .7rem;
+    }
+    .p-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+      font-weight: 600; line-height: 1.2;
+      margin-bottom: 1.15rem;
+    }
+    .p-body { font-size: 1rem; color: var(--mid); line-height: 1.85; }
+    .p-body p + p { margin-top: .8rem; }
+
+    /* stats */
+    .stats { display: flex; gap: 2.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .stat-n {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.6rem; font-weight: 900; line-height: .95;
+      color: var(--ca, var(--crimson));
+    }
+    .stat-l { font-size: .75rem; color: var(--muted); margin-top: .3rem; letter-spacing: .04em; }
+
+    /* ── Image frames ── */
+    .fr {
+      border-radius: 2px;
+      overflow: hidden;
+      background: var(--bgcard);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .fr img { width: 100%; display: block; transition: transform .6s ease; }
+    .fr:hover img { transform: scale(1.03); }
+
+    /* fixed aspect helpers */
+    .fr.r169 { aspect-ratio: 16/9; }
+    .fr.r169 img, .fr.rsq img, .fr.r32 img { height: 100%; object-fit: cover; }
+    .fr.rsq  { aspect-ratio: 1; }
+    .fr.r32  { aspect-ratio: 3/2; }
+    .fr.contain-media {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg2);
+    }
+    .fr.contain-media img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
+      transform: none;
+    }
+    .fr.contain-media:hover img { transform: none; }
+    .g22 .fr.contain-media {
+      aspect-ratio: auto;
+      min-height: 340px;
+    }
+    .fr.feature-shot {
+      background: var(--bg2);
+      padding: .5rem;
+    }
+    .fr.feature-shot img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .fr.feature-shot:hover img { transform: none; }
+
+    /* ── Policy Exchange carousel ── */
+    .pe-carousel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: var(--bg2);
+      aspect-ratio: 16 / 10;
+      min-height: 0;
+    }
+    .pe-carousel-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+    }
+    .pe-carousel-slide {
+      flex: 0 0 100%;
+      height: 100%;
+    }
+    .pe-carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--bg2);
+    }
+
+    /* ── 2×2 / 2×3 grids ── */
+    .g22 { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; }
+    .g23 { display: grid; grid-template-columns: repeat(3,1fr); gap: .875rem; }
+    .g22 .fr { aspect-ratio: 1; }
+    .g23 .fr { aspect-ratio: 16/10; }
+    .g22 .fr img, .g23 .fr img { height: 100%; object-fit: cover; }
+    .mb-grid { margin-bottom: .875rem; }
+    .mt-grid-sm { margin-top: 1.5rem; }
+    .mt-grid-md { margin-top: 2rem; }
+
+    /* ── 6-card engagement grid ── */
+    .cards {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      margin-top: 2.75rem;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 2px; overflow: hidden;
+    }
+    .card { background: var(--bg); padding: 1.65rem 1.4rem; transition: background .2s; }
+    .card:hover { background: var(--bg2); }
+    .card-n {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3.1rem; font-weight: 900; line-height: .9;
+      letter-spacing: -.03em;
+      margin-bottom: .65rem;
+      color: var(--ca, var(--pe)); opacity: .9;
+    }
+    .card-t {
+      font-size: .82rem;
+      font-weight: 500;
+      letter-spacing: .03em;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    /* ── Full-bleed screenshot ── */
+    .screengrab {
+      margin-top: 2.75rem; border-radius: 2px;
+      overflow: hidden; border: 1px solid var(--border);
+      position: relative; height: 520px;
+    }
+    .screengrab img,
+    .screengrab iframe { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; border: 0; background: #fff; }
+    .screengrab::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 100px;
+      background: linear-gradient(transparent, var(--bg));
+    }
+    .screengrab.is-live::after { display: none; }
+    /* ── CSS device mockup: MacBook on desktop, iPhone on mobile ── */
+    .device-stage {
+      --bezel: clamp(7px, 1.3vw, 15px);
+      margin: 2.75rem auto 0;
+      width: 100%;
+      max-width: 1080px;
+      perspective: 2400px;
+    }
+    .device {
+      position: relative;
+      width: 100%;
+      isolation: isolate;
+    }
+    .device-lid {
+      position: relative;
+      background: linear-gradient(#171a22, #0a0c11 18%);
+      padding: var(--bezel);
+      border-radius: 1.05rem 1.05rem 0 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.09);
+    }
+    .device-view {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1440 / 900;
+      overflow: hidden;
+      border-radius: .45rem .45rem 0 0;
+      background: #fff;
+      container-type: size;
+    }
+    .device-view iframe {
+      width: 1440px;
+      height: 900px;
+      border: 0;
+      display: block;
+      background: #fff;
+      transform-origin: top left;
+      transform: scale(calc(100cqw / 1440px));
+    }
+    @supports not (transform: scale(calc(100cqw / 1440px))) {
+      .device-view iframe { transform: scale(.73); }
+    }
+    .device-cam {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 9.5%;
+      height: calc(var(--bezel) + 5px);
+      background: #0a0c11;
+      border-radius: 0 0 7px 7px;
+      z-index: 4;
+    }
+    .device-cam::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 32%;
+      width: 4px; height: 4px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #1d2330;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07);
+    }
+    .device-island { display: none; }
+    .device-glare {
+      position: absolute;
+      inset: var(--bezel);
+      border-radius: .45rem .45rem 0 0;
+      background: linear-gradient(118deg, rgba(255,255,255,.13), rgba(255,255,255,.03) 26%, transparent 44%);
+      pointer-events: none;
+      z-index: 6;
+    }
+    .device-wake {
+      position: absolute;
+      inset: var(--bezel);
+      border-radius: .45rem .45rem 0 0;
+      background: #0a0c11;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity .9s ease .95s;
+      z-index: 5;
+    }
+    .device-stage.in .device-wake { opacity: 0; }
+    .device-base {
+      position: relative;
+      width: 103.4%;
+      margin-left: -1.7%;
+      height: clamp(9px, 1.45vw, 16px);
+      background: linear-gradient(#f1f2f4, #c6cad1 55%, #9ba1ab);
+      border-radius: 0 0 16px 16px / 0 0 10px 10px;
+      box-shadow: 0 24px 48px -18px rgba(21,21,32,.5);
+    }
+    .device-base::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 11%;
+      height: 52%;
+      background: linear-gradient(#969da7, #c9cdd3);
+      border-radius: 0 0 10px 10px;
+    }
+    /* Laptop lid opens when scrolled into view */
+    @media (min-width: 821px) {
+      .device-lid {
+        transform-origin: 50% 100%;
+        transform: rotateX(-84deg);
+        transition: transform 1.3s cubic-bezier(.32,.72,.25,1) .3s;
+      }
+      .device-stage.in .device-lid { transform: rotateX(0deg); }
+    }
+    /* Phone mode: mobile site inside an iPhone */
+    @media (max-width: 820px) {
+      .device-stage {
+        --bezel: 9px;
+        perspective: none;
+        max-width: min(20.5rem, 76vw);
+      }
+      .device {
+        transform: translateY(28px) rotate(-3.5deg);
+        transition: transform .9s cubic-bezier(.3,.7,.25,1) .15s;
+      }
+      .device-stage.in .device { transform: none; }
+      .device-lid {
+        border-radius: 2.7rem;
+        background: linear-gradient(#3a3f49, #14171e 12%, #0a0c11);
+        box-shadow: 0 24px 50px -22px rgba(21,21,32,.55);
+      }
+      .device-lid::before {
+        content: '';
+        position: absolute;
+        right: -2.5px; top: 24%;
+        width: 3px; height: 12%;
+        background: #14171e;
+        border-radius: 0 2px 2px 0;
+        z-index: -1;
+      }
+      .device-lid::after {
+        content: '';
+        position: absolute;
+        left: -2.5px; top: 102px;
+        width: 3px; height: 36px;
+        background: #14171e;
+        border-radius: 2px 0 0 2px;
+        box-shadow: 0 48px 0 #14171e;
+        z-index: -1;
+      }
+      .device-view {
+        aspect-ratio: 390 / 844;
+        border-radius: 2.15rem;
+      }
+      .device-view iframe {
+        width: 390px;
+        height: 844px;
+        transform: scale(calc(100cqw / 390px));
+      }
+      @supports not (transform: scale(calc(100cqw / 390px))) {
+        .device-view iframe { transform: scale(.71); }
+      }
+      .device-cam { display: none; }
+      .device-base { display: none; }
+      .device-island {
+        display: block;
+        position: absolute;
+        top: calc(var(--bezel) + 11px);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30%;
+        height: 22px;
+        background: #0a0c11;
+        border-radius: 999px;
+        z-index: 4;
+      }
+      .device-glare {
+        border-radius: 2.15rem;
+        background: linear-gradient(118deg, rgba(255,255,255,.11), rgba(255,255,255,.02) 30%, transparent 48%);
+      }
+      .device-wake {
+        border-radius: 2.15rem;
+        transition-delay: .5s;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .device-lid, .device { transform: none !important; transition: none; }
+      .device-wake { transition: none; }
+      .device-stage .device-wake { opacity: 0; }
+    }
+
+    /* ── Devices ── */
+    .devices { display: flex; align-items: flex-end; gap: 1.25rem; margin-top: 2.5rem; }
+    .dev-laptop { flex: 1; border-radius: 2px; overflow: hidden; border: 1px solid var(--border); }
+    .dev-laptop img { width: 100%; display: block; }
+    .dev-phone { width: 110px; flex-shrink: 0; border-radius: 2px; overflow: hidden; border: 1px solid var(--border); }
+    .dev-phone img { width: 100%; display: block; }
+
+    /* ── Side-by-side video player ── */
+    .vplayer {
+      margin-top: 2.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .vp-screens {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      align-items: stretch;
+    }
+    .vp-screen {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .vp-header {
+      background: var(--bg2);
+      padding: .55rem .9rem;
+      display: flex; align-items: center; gap: .55rem;
+      border-bottom: 1px solid var(--border);
+      min-height: 4.25rem;
+    }
+    .vp-label {
+      font-family: 'Barlow', sans-serif;
+      font-size: .76rem; font-weight: 500; letter-spacing: .02em; color: var(--text);
+      flex: 1;
+    }
+    .vp-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .62rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .16rem .5rem; border-radius: 2px;
+    }
+    .vp-badge.yt  { background: #FF0000; color: #fff; }
+    .vp-badge.sub { background: rgba(26,110,100,.12); color: var(--teal);
+                    border: 1px solid rgba(26,110,100,.28); }
+    .vp-screen video {
+      width: 100%; display: block; aspect-ratio: 16/9;
+      object-fit: cover;
+      background: #000;
+    }
+
+
+    /* status banner */
+    .vp-banner {
+      display: flex; align-items: center; justify-content: center;
+      gap: .8rem; padding: .8rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(26,110,100,.07);
+      transition: background .6s ease, border-color .6s ease, padding .6s ease;
+    }
+    .vp-banner.paid {
+      background: var(--crimson);
+      border-color: var(--oqs);
+      padding: 1.1rem 1.1rem;
+    }
+    .vp-banner-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--teal); flex-shrink: 0;
+      animation: bdot 1.6s ease-in-out infinite;
+      transition: background .6s, width .6s, height .6s;
+    }
+    .vp-banner.paid .vp-banner-dot {
+      background: rgba(255,255,255,.7);
+      width: 10px; height: 10px;
+      animation: bdot-r 1.6s ease-in-out infinite;
+    }
+    @keyframes bdot   { 0%,100%{box-shadow:0 0 0 0 rgba(26,110,100,.4)}  50%{box-shadow:0 0 0 6px rgba(26,110,100,0)} }
+    @keyframes bdot-r { 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.5)} 50%{box-shadow:0 0 0 7px rgba(255,255,255,0)} }
+    .vp-banner-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .18rem;
+    }
+    .vp-banner-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .82rem; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--teal);
+      transition: color .6s, font-size .6s, letter-spacing .6s;
+    }
+    .vp-banner-sub {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .64rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--teal) 80%, white 20%);
+      transition: color .6s, opacity .6s;
+    }
+    .vp-banner.paid .vp-banner-text {
+      color: #fff;
+      font-size: 1rem;
+      letter-spacing: .22em;
+    }
+    .vp-banner.paid .vp-banner-sub {
+      color: rgba(255,255,255,.78);
+      opacity: 0;
+    }
+
+    /* ── Studio floorplan ── */
+    .sp-wrap {
+      margin-top: 2.5rem;
+      position: relative;
+      left: 50%;
+      width: 100vw;
+      margin-left: -50vw;
+      padding: 3.25rem 0 3.5rem;
+      background: var(--bgdark);
+      border-top: 3px solid var(--crimson);
+      border-bottom: 1px solid var(--bdark);
+      overflow: hidden;
+    }
+    .sp-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)),
+        radial-gradient(circle at 22% 34%, rgba(255,255,255,.03), transparent 28%);
+      pointer-events: none;
+    }
+    .sp-wrap > .sp-grid {
+      position: relative;
+      z-index: 1;
+      width: min(1160px, calc(100vw - 5rem));
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .sp-grid {
+      display: grid; grid-template-columns: 1fr 1.6fr;
+      gap: 3rem; align-items: start;
+    }
+    .sp-plan,
+    .sp-panel {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+    .sp-wrap.in-view .sp-plan,
+    .sp-wrap.in-view .sp-panel {
+      opacity: 1;
+      transform: none;
+    }
+    .sp-wrap.in-view .sp-panel { transition-delay: .14s; }
+    .sp-plan {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: .75rem;
+      perspective: 2000px;
+      perspective-origin: 50% 30%;
+    }
+    .sp-plan-stage {
+      position: relative;
+      width: min(100%, 33rem);
+      height: 26rem;
+      transform-style: preserve-3d;
+      animation: spStageFloat 8s ease-in-out infinite;
+    }
+    .sp-plan-stage::after {
+      content: '';
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: -1rem;
+      height: 2.8rem;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(0,0,0,.55), transparent 70%);
+      filter: blur(22px);
+      opacity: .42;
+    }
+    /* ── 3D studio turntable ── */
+    .sp3-scene {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
+    .sp3-rig {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      transform: rotateX(-24deg) rotateY(var(--spin, -14deg));
+      transition: transform 1.6s cubic-bezier(.3,.85,.3,1);
+    }
+    .sp3-turn {
+      position: absolute;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+    }
+    .sp-wrap[data-show="6"] .sp3-turn { animation: sp3Turn 18s linear infinite; }
+    @keyframes sp3Turn {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+    .sp3-model {
+      position: absolute;
+      width: 0;
+      height: 0;
+      transform-style: preserve-3d;
+      --s: 1.5;
+      transform: scale3d(var(--s), var(--s), var(--s)) translate3d(-110px, 39px, -80px);
+    }
+    .sp3-floor {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 220px;
+      height: 160px;
+      transform-origin: 0 0;
+      transform: rotateX(90deg);
+      clip-path: polygon(45px 0, 220px 0, 220px 160px, 45px 160px, 0 113px, 0 43px);
+      background:
+        radial-gradient(circle at 55% 45%, rgba(82,140,255,.12), transparent 64%),
+        repeating-linear-gradient(90deg, rgba(140,180,255,.09) 0 1px, transparent 1px 22px),
+        repeating-linear-gradient(0deg, rgba(140,180,255,.09) 0 1px, transparent 1px 22px),
+        linear-gradient(180deg, rgba(32,50,92,.94), rgba(13,21,42,.98));
+    }
+    .sp3-fg {
+      position: absolute;
+      opacity: 0;
+      transition: opacity .8s ease;
+      filter: blur(9px);
+      pointer-events: none;
+    }
+    .sp3-fg-back  { left: 18%; right: 0; top: -12%; height: 58%; background: radial-gradient(ellipse at 60% 0%, rgba(94,255,213,.36), transparent 70%); }
+    .sp3-fg-right { right: -14%; width: 56%; top: -8%; bottom: -8%; background: radial-gradient(ellipse at 100% 50%, rgba(94,255,213,.36), transparent 70%); }
+    .sp3-fg-front { left: 18%; right: 0; bottom: -12%; height: 58%; background: radial-gradient(ellipse at 60% 100%, rgba(94,255,213,.36), transparent 70%); }
+    .sp3-fg-left  { left: -12%; width: 48%; top: 6%; bottom: 6%; background: radial-gradient(ellipse at 0% 50%, rgba(94,255,213,.36), transparent 70%); }
+    .sp3-fg-all   { inset: -6%; background: radial-gradient(ellipse at center, rgba(94,255,213,.24), transparent 74%); }
+    .sp-wrap[data-show="0"] .sp3-fg-left,
+    .sp-wrap[data-show="1"] .sp3-fg-front,
+    .sp-wrap[data-show="2"] .sp3-fg-right,
+    .sp-wrap[data-show="3"] .sp3-fg-back,
+    .sp-wrap[data-show="4"] .sp3-fg-right,
+    .sp-wrap[data-show="5"] .sp3-fg-back,
+    .sp-wrap[data-show="6"] .sp3-fg-all { opacity: 1; }
+    .sp3-wall {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--w);
+      height: 78px;
+      transform-origin: 0 50%;
+      transform: translate3d(var(--tx), -78px, var(--tz)) rotateY(var(--ry));
+      transform-style: preserve-3d;
+      background: rgba(22,36,66,.16);
+      border: 1px solid rgba(150,180,255,.20);
+      transition: border-color .6s ease, background .6s ease, box-shadow .6s ease;
+    }
+    .sp3-wall::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: rgba(150,180,255,.32);
+      box-shadow: 0 0 8px rgba(150,180,255,.22);
+      transition: background .6s ease, box-shadow .6s ease;
+    }
+    .sp3-wall-in {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      backface-visibility: hidden;
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 18px),
+        linear-gradient(180deg, rgba(56,76,118,.88), rgba(22,33,58,.96));
+      opacity: .92;
+      filter: brightness(.62) saturate(.8);
+      transition: filter .6s ease, opacity .6s ease;
+    }
+    .sp3-wall.on {
+      border-color: rgba(94,255,213,.85);
+      background: rgba(52,211,153,.10);
+      box-shadow: 0 0 26px rgba(52,211,153,.22);
+    }
+    .sp3-wall.on::after {
+      background: rgba(94,255,213,.92);
+      box-shadow: 0 0 14px rgba(94,255,213,.55);
+    }
+    .sp3-wall.on .sp3-wall-in {
+      filter: brightness(1.06) saturate(1.12);
+      opacity: 1;
+    }
+    .sp3-spot {
+      position: absolute;
+      inset: -8% 16% 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.22), transparent 74%);
+      clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+      opacity: 0;
+      transition: opacity .7s ease;
+    }
+    .sp3-wall.on .sp3-spot { opacity: .55; }
+    .sp3-set {
+      position: absolute;
+      inset: 9% 12%;
+      background-image: var(--img);
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255,255,255,.30);
+      border-radius: 3px;
+      box-shadow:
+        0 0 22px rgba(94,255,213,.25),
+        0 6px 18px rgba(0,0,0,.45);
+      opacity: 0;
+      transform: scale(.96);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .sp3-set-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      text-align: center;
+      color: rgba(244,240,230,.92);
+      background-image: linear-gradient(135deg, rgba(40,60,100,.92), rgba(16,24,44,.96));
+      text-shadow: 0 0 12px rgba(94,255,213,.5);
+      padding-left: .3em;
+    }
+    .sp-wrap[data-show="0"] .sp3-set[data-for="0"],
+    .sp-wrap[data-show="1"] .sp3-set[data-for="1"],
+    .sp-wrap[data-show="2"] .sp3-set[data-for="2"],
+    .sp-wrap[data-show="3"] .sp3-set[data-for="3"],
+    .sp-wrap[data-show="4"] .sp3-set[data-for="4"],
+    .sp-wrap[data-show="5"] .sp3-set[data-for="5"],
+    .sp-wrap[data-show="6"] .sp3-set:not(.sp3-set-alt) {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .sp3-cam {
+      position: absolute;
+      left: 50%;
+      bottom: -1.6rem;
+      width: 0;
+      height: 0;
+    }
+    .sp3-beam {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      height: 160px;
+      background: linear-gradient(to top, rgba(94,255,213,.13), transparent 78%);
+      clip-path: polygon(45.5% 100%, 54.5% 100%, 100% 0, 0 0);
+      pointer-events: none;
+    }
+    .sp3-cam-body {
+      position: absolute;
+      left: -16px;
+      bottom: 0;
+      width: 32px;
+      height: 20px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #2c3a5e, #141d33);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.14),
+        0 6px 14px rgba(0,0,0,.4);
+    }
+    .sp3-cam-lens {
+      position: absolute;
+      left: 50%;
+      top: -7px;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 9px;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(180deg, #3b4c77, #1b2541);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+    .sp3-cam-tally {
+      position: absolute;
+      right: 3px;
+      top: 3px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ff4d5e;
+      box-shadow: 0 0 8px rgba(255,77,94,.9);
+      animation: hcBlink 1.2s steps(2, start) infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sp3-rig { transition: none; }
+      .sp-wrap[data-show="6"] .sp3-turn { animation: none; }
+      .sp-plan-stage { animation: none; }
+      .sp3-cam-tally { animation: none; }
+    }
+    @keyframes spStageFloat {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(0, -10px, 0); }
+    }
+
+    /* Show panel */
+    .sp-panel {
+      position: relative;
+      min-height: 0;
+      padding: .25rem 0 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .sp-panel-head {
+      position: absolute;
+      top: -.15rem;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .6rem;
+      margin: 0;
+      z-index: 3;
+    }
+    .sp-nav {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .sp-arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 2px;
+      border: 1px solid var(--bdark);
+      background: rgba(244,240,230,.02);
+      color: rgba(244,240,230,.82);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .sp-arrow:hover {
+      transform: translateY(-1px);
+      background: rgba(244,240,230,.08);
+      border-color: rgba(244,240,230,.22);
+    }
+    .sp-arrow svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .sp-slide {
+      opacity: 0; transform: translateY(10px);
+      transition: opacity .4s, transform .4s;
+      pointer-events: none; position: absolute; inset: 0;
+    }
+    .sp-slide.on {
+      opacity: 1; transform: none;
+      pointer-events: auto; position: relative;
+    }
+
+    /* Video placeholder */
+    .sp-video {
+      aspect-ratio: 16/9; border-radius: 2px;
+      background: rgba(255,255,255,.03); border: 1px solid var(--bdark);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .sp-video video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .sp-video iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: 0; display: block;
+    }
+    .sp-video-blocker {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: transparent;
+      cursor: default;
+    }
+    .sp-video-poster {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,.08), transparent 58%),
+        linear-gradient(rgba(8,12,20,.22), rgba(8,12,20,.38)),
+        var(--sp-video-poster, var(--bgcard));
+      background-size: cover;
+      background-position: center;
+    }
+    .sp-video-link {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #fff;
+      background:
+        linear-gradient(rgba(8,12,20,.28), rgba(8,12,20,.42)),
+        var(--sp-video-poster, var(--bgcard));
+      background-size: cover;
+      background-position: center;
+    }
+    .sp-video-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,.08), transparent 58%);
+    }
+    .sp-video-link-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .8rem;
+      text-align: center;
+      padding: 1.25rem;
+    }
+    .sp-video-play {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.54);
+      border: 1px solid rgba(255,255,255,.24);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+    }
+    .sp-video-play svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+      margin-left: 4px;
+    }
+    .sp-video-link-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .sp-video-ph {
+      display: flex; flex-direction: column; align-items: center;
+      gap: .55rem; color: var(--muted);
+    }
+    .sp-video-ph svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .sp-video-ph span { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+    .sp-set-note {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: .8rem;
+      padding: 1.35rem 1.4rem;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+        rgba(10,14,24,.78);
+    }
+    .sp-set-note-kicker {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--oqs);
+    }
+    .sp-set-note-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.42rem;
+      font-weight: 600;
+      line-height: 1.12;
+      color: #fff;
+    }
+    .sp-set-note-copy {
+      color: rgba(244,240,230,.76);
+      font-size: .9rem;
+      line-height: 1.7;
+      max-width: 32ch;
+    }
+
+    /* Show meta row */
+    .sp-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.55rem;
+      padding-right: 8.75rem;
+      align-items: center;
+    }
+    .sp-avatar {
+      width: 98px; height: 98px; border-radius: 2px; flex-shrink: 0;
+      background: rgba(255,255,255,.03); border: 1px solid var(--bdark);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: 0 12px 24px rgba(0,0,0,.16);
+    }
+    .sp-avatar.is-empty {
+      background: rgba(255,255,255,.015);
+      border-style: dashed;
+    }
+    .sp-avatar-mark {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(244,240,230,.72);
+      text-align: center;
+      line-height: 1.2;
+      padding-left: .18em;
+    }
+    .sp-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sp-avatar svg { width: 22px; height: 22px; stroke: var(--muted); fill: none; stroke-width: 1.5; }
+    .sp-show-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 98px;
+    }
+    .sp-show-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 3.4vw, 4rem);
+      font-weight: 600;
+      color: #fff;
+      line-height: .98;
+      letter-spacing: -.01em;
+      margin-bottom: 0;
+    }
+    @media (max-width: 820px) {
+      .sp-wrap > .sp-grid {
+        width: min(100%, calc(100vw - 2.5rem));
+      }
+      .ch-intro-split {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .ch-brand-rail {
+        grid-template-columns: 1fr 1fr;
+      }
+      .sp-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .sp-plan-stage {
+        width: min(100%, 30rem);
+        height: 23rem;
+      }
+      .sp3-model { --s: 1.28; }
+      .sp-arrow { width: 38px; height: 38px; }
+      .sp-avatar { width: 74px; height: 74px; }
+      .sp-show-copy { min-height: 74px; }
+      .sp-meta { padding-right: 5.2rem; }
+      .sp-show-name { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+    }
+
+    /* ── Other work grid ── */
+    .otherwork {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin-top: 2.75rem;
+    }
+    .otherwork .fr { aspect-ratio: 4/3; }
+    .otherwork .fr img { height: 100%; object-fit: cover; object-position: top; }
+
+    /* ── Scroll reveal ── */
+    .rev {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .rev.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 5rem 0 3.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .foot-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    footer p { font-size: .8rem; color: var(--muted); }
+    .footer-brand {
+      justify-content: center;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 820px) {
+      .two, .two.flip { grid-template-columns: 1fr; gap: 2rem; direction: ltr; }
+      .cards { grid-template-columns: 1fr 1fr; }
+      .g23 { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .otherwork { grid-template-columns: 1fr; }
+      .g22 .fr.contain-media { min-height: 260px; }
+    }
+    @media (max-width: 520px) {
+      .wrap { padding: 0 1.25rem; }
+      nav { padding: 1rem 1.25rem; }
+      .cards { grid-template-columns: 1fr; }
+      .hero-camera-frame {
+        inset: 3.2rem 1.25rem 5rem;
+      }
+      h1.hero-name {
+        font-size: clamp(3.4rem, 18vw, 5rem);
+      }
+      .sp-wrap {
+        padding: 2.5rem 0 2.85rem;
+      }
+      .sp-wrap > .sp-grid {
+        width: min(100%, calc(100vw - 2.5rem));
+      }
+      .sp-plan-stage {
+        width: min(100%, 22rem);
+        height: 19rem;
+      }
+      .sp3-model { --s: .95; }
+      .sp3-beam { width: 190px; height: 120px; }
+      .sp-panel-head {
+        top: -.15rem;
+      }
+      .sp-meta {
+        padding-right: 4.6rem;
+      }
+      .sp-avatar { width: 62px; height: 62px; }
+      .sp-show-copy { min-height: 62px; }
+      .sp-show-name { font-size: 1.45rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <span class="nav-badge">OB</span>
+    <span class="nav-wordmark">Oscar Bicket</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#oqs">OQS Media</a></li>
+    <li><a href="#pe">Policy Exchange</a></li>
+    <li><a href="#ow">Other Work</a></li>
+  </ul>
+</nav>
+
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section id="hero">
+  <div class="hero-tech" aria-hidden="true">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-console">
+      <div class="hero-console-inner">
+        <div class="hero-console-head">
+          <span>OQS · Studio 1</span>
+          <span class="hc-title">Multiview</span>
+          <span class="hc-rec"><span class="hc-rec-dot"></span><span id="hcTimecode">00:00:00:00</span></span>
+        </div>
+        <div class="hero-console-grid">
+          <div class="hc-tile hc-t-video">
+            <div class="hc-footage"></div>
+            <span class="hc-play"></span>
+            <span class="hc-scrub"></span>
+            <span class="hc-label">Videos</span>
+          </div>
+          <div class="hc-tile hc-t-live">
+            <span class="hc-live-badge">Live</span>
+            <div class="hc-vu"><span></span><span></span><span></span><span></span><span></span></div>
+            <span class="hc-label">Livestreams</span>
+          </div>
+          <div class="hc-tile hc-t-studio">
+            <div class="hc-room">
+              <i class="hc-rw1"></i><i class="hc-rw2"></i><i class="hc-rw3"></i><i class="hc-rw4"></i><i class="hc-rfloor"></i>
+            </div>
+            <span class="hc-label">Studio</span>
+          </div>
+          <div class="hc-tile hc-t-social">
+            <div class="hc-bars"><span></span><span></span><span></span><span></span></div>
+            <span class="hc-pip hc-pip1">♥</span>
+            <span class="hc-pip hc-pip2">♥</span>
+            <span class="hc-label">Social Media</span>
+          </div>
+          <div class="hc-tile hc-t-media">
+            <div class="hc-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <span class="hc-label">Media</span>
+          </div>
+          <div class="hc-tile hc-t-onair">
+            <span class="hc-onair">On Air</span>
+            <span class="hc-label">OQS Studio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-camera-frame"></div>
+  </div>
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Broadcast Producer · Studio Lead · Digital Strategist</p>
+    <h1 class="hero-name"><span class="hero-word-oscar">Oscar</span><span class="hero-word-bicket">Bicket</span></h1>
+    <p class="hero-sub">Head of Production for leading media brands.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Broadcast Production</span>
+      <span class="hero-tag">Studio Management</span>
+      <span class="hero-tag">Live Streaming</span>
+      <span class="hero-tag">Web Development</span>
+      <span class="hero-tag">Digital Strategy</span>
+      <span class="hero-tag">Social Media</span>
+      <span class="hero-tag">Email Marketing</span>
+      <span class="hero-tag">SEO</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ CHAPTER 1 · OQS MEDIA ═══════════════════════════════ -->
+<section id="oqs" class="chapter c-oqs">
+  <div class="wrap">
+
+    <div class="ch-intro ch-intro-split no-watermark rev">
+      <div>
+        <p class="ch-num">2024 - Present</p>
+        <div class="ch-rule"></div>
+        <h2 class="ch-title">Head of Production - OQS Media</h2>
+        <p class="ch-desc">Senior production and studio lead specialising in broadcast, livestreaming and subscription media — producing for UnHerd and The Spectator.</p>
+      </div>
+      <div class="ch-brand-rail" aria-label="OQS brand logos">
+        <div class="brand-card brand-card-oqs">
+          <img src="portfolio-images/oqs-media-logo.webp" alt="OQS Media logo">
+        </div>
+        <div class="brand-card brand-card-spectator">
+          <img src="portfolio-images/spectator-logo.png" alt="The Spectator logo">
+        </div>
+        <div class="brand-card brand-card-unherd">
+          <img src="portfolio-images/unherd-logo.png" alt="UnHerd logo">
+        </div>
+      </div>
+    </div>
+
+    <!-- Studio -->
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Studio Development</p>
+          <h3 class="p-title">Rebuilding the studio from the ground up</h3>
+          <div class="p-body">
+            <p>I led the redevelopment of our main studio to support productions for both UnHerd and The Spectator, adapting the space to handle a wider range of programmes, formats and production demands.</p>
+            <p>This included redesigning the layout, upgrading technical infrastructure and establishing the capability to run parallel shoots simultaneously. The result was a flexible, broadcast-ready studio delivering consistent output across both titles — improving efficiency and enabling the launch of new shows without reliance on external facilities.</p>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="fr feature-shot">
+            <img src="portfolio-images/oqs-studio-5.jpg" alt="OQS Media studio production still">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Studio Floorplan -->
+    <div class="project sp-wrap rev">
+      <div class="sp-grid">
+
+        <!-- Left: 3D studio model on a turntable -->
+        <div class="sp-plan">
+          <div class="sp-plan-stage">
+            <div class="sp3-scene" aria-hidden="true">
+              <div class="sp3-rig" id="spRig">
+                <div class="sp3-turn" id="spTurn">
+                  <!-- Hexagonal studio, plan units: A(45,0) B(220,0) C(220,160) D(45,160) E(0,113) F(0,43), wall height 78 -->
+                  <div class="sp3-model">
+                    <div class="sp3-floor">
+                      <span class="sp3-fg sp3-fg-back"></span>
+                      <span class="sp3-fg sp3-fg-right"></span>
+                      <span class="sp3-fg sp3-fg-front"></span>
+                      <span class="sp3-fg sp3-fg-left"></span>
+                      <span class="sp3-fg sp3-fg-all"></span>
+                    </div>
+                    <!-- Back wall: Reality Check / Private Hire -->
+                    <div class="sp3-wall sp3-w-back" style="--w:175px; --tx:45px; --tz:0px; --ry:0deg">
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set" data-for="3" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
+                        <span class="sp3-set sp3-set-text sp3-set-alt" data-for="5">Private Hire</span>
+                        <span class="sp3-spot"></span>
+                      </div>
+                    </div>
+                    <!-- Right wall: Coffee House / Reality Check Set 2 -->
+                    <div class="sp3-wall sp3-w-right" style="--w:160px; --tx:220px; --tz:0px; --ry:-90deg">
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set" data-for="2" style="--img:url('portfolio-images/coffee-house-cover.jpg')"></span>
+                        <span class="sp3-set sp3-set-alt" data-for="4" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
+                        <span class="sp3-spot"></span>
+                      </div>
+                    </div>
+                    <!-- Front wall: Quite Right -->
+                    <div class="sp3-wall sp3-w-front" style="--w:175px; --tx:220px; --tz:160px; --ry:180deg">
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set" data-for="1" style="--img:url('portfolio-images/qright-cover.webp')"></span>
+                        <span class="sp3-spot"></span>
+                      </div>
+                    </div>
+                    <!-- Left bay (three segments): UnHerd TV -->
+                    <div class="sp3-wall sp3-w-bl" style="--w:65px; --tx:45px; --tz:160px; --ry:133.7deg">
+                      <div class="sp3-wall-in"><span class="sp3-spot"></span></div>
+                    </div>
+                    <div class="sp3-wall sp3-w-lv" style="--w:70px; --tx:0px; --tz:113px; --ry:90deg">
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set" data-for="0" style="--img:url('portfolio-images/unherd-tv-cover.webp')"></span>
+                        <span class="sp3-spot"></span>
+                      </div>
+                    </div>
+                    <div class="sp3-wall sp3-w-tl" style="--w:62px; --tx:0px; --tz:43px; --ry:43.7deg">
+                      <div class="sp3-wall-in"><span class="sp3-spot"></span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Fixed camera: the room turns, the camera stays -->
+              <div class="sp3-cam">
+                <span class="sp3-beam"></span>
+                <span class="sp3-cam-body"><span class="sp3-cam-lens"></span><span class="sp3-cam-tally"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Show cards -->
+        <div class="sp-panel" id="spPanel">
+          <div class="sp-panel-head">
+            <div class="sp-nav">
+              <button class="sp-arrow" id="spPrev" type="button" aria-label="Previous show">
+                <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button class="sp-arrow" id="spNext" type="button" aria-label="Next show">
+                <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Show 0: UnHerd TV -->
+          <div class="sp-slide" id="spSlide0">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv0">
+                <img src="portfolio-images/unherd-tv-cover.webp" alt="UnHerd TV cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">UnHerd TV</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid0">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=W_Gdi5RpYgI&t=52s"
+                data-poster="portfolio-images/unherd-tv-cover.webp"
+                src="https://www.youtube-nocookie.com/embed/W_Gdi5RpYgI?start=52&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="UnHerd TV clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 1: Quite Right -->
+          <div class="sp-slide" id="spSlide1">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv1">
+                <img src="portfolio-images/qright-cover.webp" alt="Quite Right cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Quite Right</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid1">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=CrSQguQFqkY&t=757s"
+                data-poster="portfolio-images/qright-cover.webp"
+                src="https://www.youtube-nocookie.com/embed/CrSQguQFqkY?start=757&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Quite Right clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 2: Coffee House -->
+          <div class="sp-slide" id="spSlide2">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv2">
+                <img src="portfolio-images/coffee-house-cover.jpg" alt="Coffee House cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Coffee House</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid2">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=7UK6KuBaGTM&t=158s"
+                data-poster="portfolio-images/coffee-house-cover.jpg"
+                src="https://www.youtube-nocookie.com/embed/7UK6KuBaGTM?start=158&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Coffee House clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 3: Reality Check -->
+          <div class="sp-slide" id="spSlide3">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv3">
+                <img src="portfolio-images/reality-check-cover.jpg" alt="Reality Check cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Reality Check</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid3">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=oi0YHJxQsiI&t=602s"
+                data-poster="portfolio-images/reality-check-cover.jpg"
+                src="https://www.youtube-nocookie.com/embed/oi0YHJxQsiI?start=602&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Reality Check clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 4: Reality Check Set 2 -->
+          <div class="sp-slide" id="spSlide4">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv4">
+                <img src="portfolio-images/reality-check-cover.jpg" alt="Reality Check Set 2 cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Reality Check Set 2</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid4">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=T9bOHy0GmrU&t=1050s"
+                data-poster="portfolio-images/reality-check-cover.jpg"
+                src="https://www.youtube-nocookie.com/embed/T9bOHy0GmrU?start=1050&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Reality Check Set 2 clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 5: Private Hire -->
+          <div class="sp-slide" id="spSlide5">
+            <div class="sp-meta">
+              <div class="sp-avatar is-empty" id="spAv5">
+                <span class="sp-avatar-mark">Private<br>Hire</span>
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Private Hire</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid5">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=NEB8e049osk"
+                data-poster=""
+                src="https://www.youtube-nocookie.com/embed/NEB8e049osk?autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Private Hire clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <!-- Show 6: Edition -->
+          <div class="sp-slide" id="spSlide6">
+            <div class="sp-meta">
+              <div class="sp-avatar" id="spAv6">
+                <img src="portfolio-images/edition-cover.jpg" alt="Edition cover art">
+              </div>
+              <div class="sp-show-copy">
+                <div class="sp-show-name">Edition</div>
+              </div>
+            </div>
+            <div class="sp-video" id="spVid6">
+              <iframe
+                data-youtube-embed="true"
+                data-fallback-url="https://www.youtube.com/watch?v=_P3w2cPyqmA&t=861s"
+                data-poster="portfolio-images/edition-cover.jpg"
+                src="https://www.youtube-nocookie.com/embed/_P3w2cPyqmA?start=861&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
+                title="Edition clip"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+        </div><!-- /sp-panel -->
+      </div><!-- /sp-grid -->
+    </div><!-- /sp-wrap -->
+
+    <!-- Livestreams -->
+    <div class="project">
+      <div class="rev">
+        <p class="p-label">Hybrid Livestreaming</p>
+        <h3 class="p-title">A paywall livestream system for The Spectator</h3>
+        <div class="p-body">
+          <p>I designed and delivered a hybrid live-streaming system that operates simultaneously in front of and behind The Spectator and UnHerd's paywall.</p>
+          <p>Events broadcast to both public platforms and subscribers at the same time. The free stream stays fully open for an initial period — then automatically switches to a blurred feed with pre-recorded prompts directing viewers to subscribe, while the subscriber stream continues uninterrupted. Highly effective at converting live audiences into paying subscribers.</p>
+        </div>
+      </div>
+
+      <!-- Side-by-side real videos -->
+      <div class="vplayer rev d1" id="vplayer">
+        <div class="vp-banner" id="vpBanner">
+          <div class="vp-banner-dot"></div>
+          <span class="vp-banner-copy">
+            <span class="vp-banner-text" id="vpBannerText">Free to Watch</span>
+            <span class="vp-banner-sub" id="vpBannerSub">Subscriber access in 00:17</span>
+          </span>
+        </div>
+        <div class="vp-screens">
+
+          <div class="vp-screen">
+            <div class="vp-header">
+              <span class="vp-label">YouTube · Public stream</span>
+              <span class="vp-badge yt">YouTube</span>
+            </div>
+            <video id="vidYT" preload="metadata" playsinline loop>
+              <source src="videos/Youtube version.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <div class="vp-screen">
+            <div class="vp-header">
+              <span class="vp-label">Spectator · Subscriber stream</span>
+              <span class="vp-badge sub">✓ Subscriber</span>
+            </div>
+            <video id="vidSub" preload="metadata" playsinline loop>
+              <source src="videos/Mux version.mp4" type="video/mp4">
+            </video>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Undercurrents -->
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Undercurrents — Washington DC</p>
+          <h3 class="p-title">Building UnHerd's US show to 100k+ subscribers</h3>
+          <div class="p-body">
+            <p>Undercurrents is UnHerd's US news show, launched from Washington DC. I led the build of the DC studio and now manage the US production team, establishing a regular broadcast combining live presentation, interviews and rapid-turnaround analysis of US politics and culture.</p>
+            <p>Since launch the show has grown to over 100,000 YouTube subscribers, delivering consistent output while responding quickly to major news events.</p>
+          </div>
+          <div class="stats">
+            <div>
+              <div class="stat-n">100k+</div>
+              <div class="stat-l">YouTube subscribers</div>
+            </div>
+            <div>
+              <div class="stat-n">468</div>
+              <div class="stat-l">Videos published</div>
+            </div>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="g22 mb-grid">
+            <div class="fr rsq"><img src="portfolio-images/oqs-under-1.png" alt="Undercurrents DC studio"></div>
+            <div class="fr rsq"><img src="portfolio-images/oqs-under-2.png" alt="Undercurrents interview"></div>
+          </div>
+          <div class="fr r169"><img src="portfolio-images/oqs-under-yt.png" alt="Undercurrents YouTube channel — 104K subscribers"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ CHAPTER 2 · POLICY EXCHANGE ═══════════════════════════════ -->
+<section id="pe" class="chapter c-pe">
+  <div class="wrap">
+
+    <div class="ch-intro rev" data-chapter="02">
+      <p class="ch-num">2019 - 2024</p>
+      <div class="ch-rule"></div>
+      <h2 class="ch-title">Head of Digital - Policy Exchange</h2>
+      <p class="ch-desc">Built Policy Exchange's studio, led a full website overhaul, and refreshed the brand's digital presentation across broadcast, publishing and campaigns.</p>
+    </div>
+
+    <!-- Broadcast & Webinars -->
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Broadcast &amp; Webinars</p>
+          <h3 class="p-title">Building a studio for the digital age</h3>
+          <div class="p-body">
+            <p>At the start of the pandemic, Policy Exchange faced the challenge of moving its entire events programme online without sacrificing quality or brand consistency.</p>
+            <p>I designed and built a bespoke studio allowing physical and virtual panellists to be mixed into a single live broadcast and Zoom webinar — so audiences could still ask questions and feel part of the event. All sessions are also live-streamed across social platforms.</p>
+            <p>This was later developed into a full hybrid studio within a new dedicated events space.</p>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="pe-carousel" id="peCarousel" aria-label="Policy Exchange image carousel">
+            <div class="pe-carousel-track" id="peCarouselTrack">
+              <div class="pe-carousel-slide"><img src="portfolio-images/image2.jpeg" alt="Policy Exchange broadcast studio"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image1.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image2.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image3.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image4.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image5.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image6.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image7.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image8.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image9.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image10.png" alt="Policy Exchange broadcast"></div>
+              <div class="pe-carousel-slide"><img src="portfolio-images/image11.png" alt="Policy Exchange broadcast"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Engagement -->
+    <div class="project">
+      <div class="rev">
+        <p class="p-label">Digital Growth Strategy</p>
+        <h3 class="p-title">Increasing engagement across every channel</h3>
+        <p class="p-body">A multi-pronged approach to growing Policy Exchange's digital footprint and audience reach.</p>
+      </div>
+      <div class="cards rev d1">
+        <div class="card"><div class="card-n">01</div><p class="card-t">Brand Review</p></div>
+        <div class="card"><div class="card-n">02</div><p class="card-t">Project Management of New Website</p></div>
+        <div class="card"><div class="card-n">03</div><p class="card-t">Implementation of Online Ad Spending</p></div>
+        <div class="card"><div class="card-n">04</div><p class="card-t">Redeveloping Mailing List Strategy</p></div>
+        <div class="card"><div class="card-n">05</div><p class="card-t">Improved SEO</p></div>
+        <div class="card"><div class="card-n">06</div><p class="card-t">Making Content Accessible Across Multiple Platforms</p></div>
+      </div>
+
+      <div class="g22 rev d2 mt-grid-sm">
+        <div class="fr contain-media"><img src="portfolio-images/pe-event-1.jpg" alt="Levelling Up the Digital Economy event — Policy Exchange &amp; Google"></div>
+        <div class="fr contain-media"><img src="portfolio-images/pe-event-2.jpg" alt="History Matters Conference — Policy Exchange"></div>
+      </div>
+    </div>
+
+    <!-- Website -->
+    <div class="project">
+      <div class="rev">
+        <p class="p-label">Website Development</p>
+        <h3 class="p-title">A complete website overhaul</h3>
+        <div class="p-body">
+          <p>I designed and led the development team to build Policy Exchange's new website — delivering a long-overdue visual refresh alongside genuine technical improvements: an integrated online reader for publications, rebuilt search, and back-end changes that measurably improved SEO and page load performance.</p>
+        </div>
+      </div>
+      <div class="device-stage rev d1">
+        <div class="device">
+          <div class="device-lid">
+            <div class="device-view">
+              <iframe src="https://policyexchange.org.uk/" title="Policy Exchange website preview" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+            <span class="device-cam" aria-hidden="true"></span>
+            <span class="device-island" aria-hidden="true"></span>
+            <span class="device-wake" aria-hidden="true"></span>
+            <span class="device-glare" aria-hidden="true"></span>
+          </div>
+          <div class="device-base" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ OTHER WORK ═══════════════════════════════ -->
+<section id="ow" class="chapter c-ow">
+  <div class="wrap">
+
+    <div class="ch-intro no-watermark rev">
+      <div class="ch-rule"></div>
+      <h2 class="ch-title">Other Work</h2>
+      <p class="ch-desc">Selected financial media, campaign, website and digital projects beyond my core OQS Media and Policy Exchange roles.</p>
+    </div>
+
+    <!-- Financial News -->
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Financial News Media · 2014–2017</p>
+          <h3 class="p-title">Three financial news platforms, built from scratch</h3>
+          <div class="p-body">
+            <p>Between 2014 and 2017 I designed and developed OilBarrel.com, MineSite.com and WallStreetWires.com on the WordPress platform.</p>
+            <p>Two were subsequently acquired and merged into masterinvestor.co.uk, validating both the audience value and quality of the product.</p>
+          </div>
+          <div class="stats">
+            <div><div class="stat-n">200k+</div><div class="stat-l">Monthly visitors per site</div></div>
+            <div><div class="stat-n">10k+</div><div class="stat-l">Daily email subscribers</div></div>
+            <div><div class="stat-n">2</div><div class="stat-l">Sites subsequently acquired</div></div>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="fr contain-media"><img src="portfolio-images/image9.jpeg" alt="Financial news website mockup"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="two flip">
+        <div class="rev">
+          <p class="p-label">WallStreet Wires</p>
+          <h3 class="p-title">Traffic, credibility &amp; social media growth</h3>
+          <div class="p-body">
+            <p>After a full redevelopment of the WallStreet Wires site we saw a substantial increase in both traffic and brand credibility. My role covered social media management, paid ad strategy and ongoing website development.</p>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="fr contain-media"><img src="portfolio-images/image14.png" alt="WallStreet Wires analytics"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Live Event Production · 2015</p>
+          <h3 class="p-title">Zak's Traders Cafe — investment conference streaming</h3>
+          <div class="p-body">
+            <p>Produced and live-streamed the "Zak's Traders Cafe" investment conference series, extending its reach beyond the room and building an engaged digital community around the brand.</p>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="fr contain-media"><img src="portfolio-images/image17.png" alt="Zak's Traders Cafe live stream"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bob Seely social -->
+    <div class="project">
+      <div class="two">
+        <div class="rev">
+          <p class="p-label">Social Media · 2017–2019</p>
+          <h3 class="p-title">Bob Seely MP — building a constituency presence</h3>
+          <div class="p-body">
+            <p>Ran end-to-end social media campaigns for Bob Seely MP, creating content that communicated his policy positions and constituency work to a broad public audience across multiple platforms.</p>
+          </div>
+        </div>
+        <div class="rev d1">
+          <div class="g22">
+            <div class="fr rsq"><img src="portfolio-images/image10.jpeg" alt="Bob Seely MP campaign"></div>
+            <div class="fr rsq"><img src="portfolio-images/image11.jpeg" alt="Bob Seely MP campaign"></div>
+            <div class="fr rsq"><img src="portfolio-images/image12.jpeg" alt="Bob Seely MP campaign"></div>
+            <div class="fr rsq"><img src="portfolio-images/image13.jpeg" alt="Bob Seely MP campaign"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bob Seely website -->
+    <div class="project">
+      <div class="rev">
+        <p class="p-label">Website Development</p>
+        <h3 class="p-title">Bob Seely MP — policy website</h3>
+        <p class="p-body">Designed and developed a dedicated policy website for Bob Seely MP — a professional home for his policy platform and constituency communications, fully responsive across desktop and mobile.</p>
+      </div>
+      <div class="devices rev d1">
+        <div class="dev-laptop"><img src="portfolio-images/image18.png" alt="Bob Seely MP website on laptop"></div>
+        <div class="dev-phone"><img src="portfolio-images/image19.png" alt="Bob Seely MP website on mobile"></div>
+      </div>
+    </div>
+
+    <div class="otherwork rev">
+      <div class="fr"><img src="portfolio-images/image20.png" alt="Website project"></div>
+      <div class="fr"><img src="portfolio-images/image21.png" alt="Website project"></div>
+      <div class="fr"><img src="portfolio-images/image22.png" alt="Website project"></div>
+      <div class="fr"><img src="portfolio-images/image23.png" alt="Website project"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-name">Oscar Bicket</div>
+    <p>Broadcast Producer &nbsp;·&nbsp; Studio Lead &nbsp;·&nbsp; Digital Strategist</p>
+  </div>
+</footer>
+
+
+<script>
+  // Synced video player
+  (function () {
+    const yt      = document.getElementById('vidYT');
+    const sub     = document.getElementById('vidSub');
+    const banner  = document.getElementById('vpBanner');
+    const bannerTx= document.getElementById('vpBannerText');
+    const bannerSub = document.getElementById('vpBannerSub');
+    const player  = document.getElementById('vplayer');
+
+    if (!yt || !sub) return;
+
+    const PAYWALL_T = 17;
+    let autoplayed = false;
+    let isPaid     = false;
+
+    yt.muted  = true;
+    sub.muted = true;
+
+    function formatCountdown(seconds) {
+      const safe = Math.max(0, Math.ceil(seconds));
+      const mins = String(Math.floor(safe / 60)).padStart(2, '0');
+      const secs = String(safe % 60).padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function syncSub() {
+      if (Math.abs(sub.currentTime - yt.currentTime) > 0.4)
+        sub.currentTime = yt.currentTime;
+    }
+
+    function setBanner(paid) {
+      if (paid === isPaid) return;
+      isPaid = paid;
+      banner.classList.toggle('paid', paid);
+      bannerTx.textContent = paid ? 'Subscriber Only Livestream' : 'Free to Watch';
+      if (bannerSub) {
+        bannerSub.textContent = paid ? '' : `Subscriber access in ${formatCountdown(PAYWALL_T - yt.currentTime)}`;
+      }
+    }
+
+    // Keep sub in sync and update banner
+    yt.addEventListener('timeupdate', () => {
+      syncSub();
+      setBanner(yt.currentTime >= PAYWALL_T);
+      if (bannerSub && yt.currentTime < PAYWALL_T) {
+        bannerSub.textContent = `Subscriber access in ${formatCountdown(PAYWALL_T - yt.currentTime)}`;
+      }
+    });
+
+    // On loop, reset banner
+    yt.addEventListener('play', () => sub.play().catch(() => {}));
+
+    // Autoplay (muted) when player is 60% visible
+    const autoObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !autoplayed) {
+          autoplayed = true;
+          autoObs.disconnect();
+          yt.play().catch(() => {});
+          sub.play().catch(() => {});
+        }
+      });
+    }, { threshold: 0.6 });
+    autoObs.observe(player);
+  })();
+
+  // ── Studio floorplan ──
+  (function () {
+    const ROTATE_MS = 12000;
+
+    // Turntable target (deg) per show — the room spins so the active wall
+    // sits at the back of the view, its set facing the fixed camera.
+    const SHOWS = [
+      { walls: ['tl', 'lv', 'bl'], spin: -90 }, // 0: UnHerd TV — left bay
+      { walls: ['front'],          spin: 180 }, // 1: Quite Right — front wall
+      { walls: ['right'],          spin:  90 }, // 2: Coffee House — right wall
+      { walls: ['back'],           spin:   0 }, // 3: Reality Check — back wall
+      { walls: ['right'],          spin:  90 }, // 4: RC Set 2 — right wall
+      { walls: ['back'],           spin:   0 }, // 5: Private Hire — back wall
+      { walls: ['back', 'right', 'front', 'bl', 'lv', 'tl'], spin: 0 }, // 6: Edition — full turntable
+    ];
+
+    const slides      = document.querySelectorAll('.sp-slide');
+    const wrap        = document.querySelector('.sp-wrap');
+    const prevBtn     = document.getElementById('spPrev');
+    const nextBtn     = document.getElementById('spNext');
+    const slideEmbeds = Array.from(slides, sl => sl.querySelector('iframe[data-youtube-embed]'));
+    const rig         = document.getElementById('spRig');
+    const turn        = document.getElementById('spTurn');
+    const wallEls     = {};
+    ['back', 'right', 'front', 'bl', 'lv', 'tl'].forEach(k => {
+      wallEls[k] = document.querySelector('.sp3-w-' + k);
+    });
+    let current = -1, timer = null, started = false, angle = -14;
+
+    // Rotate to the target heading via the shortest arc, keeping a cumulative
+    // angle so the model never unwinds through a long way round.
+    function spinTo(base) {
+      const cur = ((angle % 360) + 360) % 360;
+      const tgt = ((base % 360) + 360) % 360;
+      let d = tgt - cur;
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      angle += d;
+      if (rig) rig.style.setProperty('--spin', angle + 'deg');
+    }
+
+    function showSlide(i) {
+      if (i === current) return;
+      // Swap YouTube iframes — only load the active one
+      slideEmbeds.forEach((iframe, idx) => {
+        if (!iframe) return;
+        if (!iframe.dataset.embedSrc) iframe.dataset.embedSrc = iframe.src;
+        iframe.src = idx === i ? iframe.dataset.embedSrc : 'about:blank';
+      });
+      // Leaving the Edition turntable: fold the animation's current rotation
+      // into the rig heading so the next spin continues without a jump.
+      if (wrap.dataset.show === '6' && i !== 6 && rig && turn) {
+        const t = getComputedStyle(turn).transform;
+        if (t && t !== 'none') {
+          const m = new DOMMatrixReadOnly(t);
+          angle += Math.atan2(m.m31, m.m11) * 180 / Math.PI;
+          rig.style.transition = 'none';
+          rig.style.setProperty('--spin', angle + 'deg');
+          void rig.offsetWidth;
+          rig.style.transition = '';
+        }
+      }
+      current = i;
+      wrap.dataset.show = String(i);
+      Object.keys(wallEls).forEach(k => wallEls[k] && wallEls[k].classList.remove('on'));
+      SHOWS[i].walls.forEach(k => wallEls[k] && wallEls[k].classList.add('on'));
+      spinTo(SHOWS[i].spin);
+      slides.forEach((sl, idx) => sl.classList.toggle('on', idx === i));
+    }
+
+    function startCycle() {
+      if (timer) return;
+      showSlide(0);
+      timer = setInterval(() => showSlide((current + 1) % SHOWS.length), ROTATE_MS);
+    }
+
+    function restartCycle() {
+      clearInterval(timer);
+      timer = setInterval(() => showSlide((current + 1) % SHOWS.length), ROTATE_MS);
+    }
+
+    function goToSlide(i) {
+      showSlide((i + SHOWS.length) % SHOWS.length);
+      restartCycle();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(current - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(current + 1));
+
+    const fpObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !started) {
+          started = true; fpObs.disconnect();
+          wrap.classList.add('in-view');
+          setTimeout(startCycle, 1400);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    if (wrap) fpObs.observe(wrap);
+  })();
+
+  // ── Hero multiview timecode ──
+  (function () {
+    const tc = document.getElementById('hcTimecode');
+    if (!tc) return;
+    const t0 = Date.now();
+    const pad = n => String(n).padStart(2, '0');
+    setInterval(() => {
+      const d = (Date.now() - t0) / 1000;
+      tc.textContent =
+        pad(Math.floor(d / 3600)) + ':' +
+        pad(Math.floor(d / 60) % 60) + ':' +
+        pad(Math.floor(d) % 60) + ':' +
+        pad(Math.floor((d % 1) * 25));
+    }, 40);
+  })();
+
+  // Disable manual interaction on studio embeds
+  (function () {
+    document.querySelectorAll('.sp-video').forEach((videoBox) => {
+      if (!videoBox.querySelector('iframe[data-youtube-embed]')) return;
+      if (videoBox.querySelector('.sp-video-blocker')) return;
+      const blocker = document.createElement('div');
+      blocker.className = 'sp-video-blocker';
+      blocker.setAttribute('aria-hidden', 'true');
+      videoBox.appendChild(blocker);
+    });
+  })();
+
+  // Local file fallback for YouTube embeds
+  (function () {
+    if (window.location.protocol !== 'file:') return;
+
+    document.querySelectorAll('iframe[data-youtube-embed="true"]').forEach((iframe) => {
+      const href = iframe.dataset.fallbackUrl;
+      const poster = iframe.dataset.poster;
+      if (!href) return;
+
+      const posterEl = document.createElement('div');
+      posterEl.className = 'sp-video-poster';
+      if (poster) {
+        posterEl.style.setProperty('--sp-video-poster', `url("${poster}")`);
+      }
+
+      iframe.replaceWith(posterEl);
+    });
+  })();
+
+  // Policy Exchange auto-sliding carousel
+  (function () {
+    const carousel = document.getElementById('peCarousel');
+    const track = document.getElementById('peCarouselTrack');
+    if (!carousel || !track) return;
+
+    const slides = Array.from(track.children);
+    if (slides.length < 2) return;
+
+    const firstClone = slides[0].cloneNode(true);
+    track.appendChild(firstClone);
+
+    let index = 0;
+    let locked = false;
+    let timer = null;
+
+    function moveTo(nextIndex, animate = true) {
+      track.style.transition = animate ? 'transform .9s cubic-bezier(.4,0,.2,1)' : 'none';
+      track.style.transform = `translateX(-${nextIndex * 100}%)`;
+    }
+
+    function advance() {
+      if (locked) return;
+      locked = true;
+      index += 1;
+      moveTo(index, true);
+    }
+
+    function start() {
+      clearInterval(timer);
+      timer = setInterval(advance, 3200);
+    }
+
+    track.addEventListener('transitionend', () => {
+      if (index === slides.length) {
+        index = 0;
+        moveTo(index, false);
+      }
+      locked = false;
+    });
+
+    carousel.addEventListener('mouseenter', () => clearInterval(timer));
+    carousel.addEventListener('mouseleave', start);
+
+    moveTo(0, false);
+    start();
+  })();
+
+  // Progress bar
+  const bar = document.getElementById('bar');
+  const onScroll = () => {
+    const d = document.documentElement;
+    bar.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+    document.getElementById('nav').classList.toggle('stuck', window.scrollY > 60);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Reveal on scroll
+  const revObs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }
+  );
+  document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
+
+  // Active nav link
+  const links = document.querySelectorAll('.nav-links a');
+  const navObs = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting)
+        links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+    }),
+    { threshold: 0.35 }
+  );
+  document.querySelectorAll('section[id]').forEach(s => navObs.observe(s));
+</script>
+
+</body>
+</html>
