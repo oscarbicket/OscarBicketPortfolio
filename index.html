@@ -1471,10 +1471,12 @@
     .sp-wrap[data-show="3"] .sp3-set[data-for="3"],
     .sp-wrap[data-show="4"] .sp3-set[data-for="4"],
     .sp-wrap[data-show="5"] .sp3-set[data-for="5"],
-    .sp-wrap[data-show="6"] .sp3-set:not(.sp3-set-alt) {
+    .sp-wrap[data-show="6"] .sp3-set[data-for="6"] {
       opacity: 1;
       transform: scale(1);
     }
+    /* Edition cover is square; anchor to the bottom so the wordmark shows */
+    .sp3-set-edition { background-position: center bottom; }
     .sp3-cam {
       position: absolute;
       left: 50%;
@@ -2034,6 +2036,7 @@
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="3" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
                         <span class="sp3-set sp3-set-text sp3-set-alt" data-for="5">Private Hire</span>
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2042,6 +2045,7 @@
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="2" style="--img:url('portfolio-images/coffee-house-cover.jpg')"></span>
                         <span class="sp3-set sp3-set-alt" data-for="4" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2049,21 +2053,29 @@
                     <div class="sp3-wall sp3-w-front" style="--w:175px; --tx:220px; --tz:160px; --ry:180deg">
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="1" style="--img:url('portfolio-images/qright-cover.webp')"></span>
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
                     <!-- Left bay (three segments): UnHerd TV -->
                     <div class="sp3-wall sp3-w-bl" style="--w:65px; --tx:45px; --tz:160px; --ry:133.7deg">
-                      <div class="sp3-wall-in"><span class="sp3-spot"></span></div>
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
+                        <span class="sp3-spot"></span>
+                      </div>
                     </div>
                     <div class="sp3-wall sp3-w-lv" style="--w:70px; --tx:0px; --tz:113px; --ry:90deg">
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="0" style="--img:url('portfolio-images/unherd-tv-cover.webp')"></span>
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
                     <div class="sp3-wall sp3-w-tl" style="--w:62px; --tx:0px; --tz:43px; --ry:43.7deg">
-                      <div class="sp3-wall-in"><span class="sp3-spot"></span></div>
+                      <div class="sp3-wall-in">
+                        <span class="sp3-set sp3-set-edition" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
+                        <span class="sp3-spot"></span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2297,7 +2309,7 @@
               <span class="vp-badge yt">YouTube</span>
             </div>
             <video id="vidYT" preload="metadata" playsinline loop>
-              <source src="videos/Youtube version.mp4" type="video/mp4">
+              <source src="Videos/Youtube%20version.mp4" type="video/mp4">
             </video>
           </div>
 
@@ -2307,7 +2319,7 @@
               <span class="vp-badge sub">✓ Subscriber</span>
             </div>
             <video id="vidSub" preload="metadata" playsinline loop>
-              <source src="videos/Mux version.mp4" type="video/mp4">
+              <source src="Videos/Mux%20version.mp4" type="video/mp4">
             </video>
           </div>
 
