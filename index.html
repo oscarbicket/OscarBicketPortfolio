@@ -1794,6 +1794,9 @@
       .sp-show-copy { min-height: 74px; }
       .sp-meta { padding-right: 5.2rem; }
       .sp-show-name { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+      /* Stack the paywall demo videos — side-by-side columns wrap and
+         crowd the header/badge below ~600px */
+      .vp-screens { grid-template-columns: 1fr; }
     }
 
     /* ── Other work grid ── */
@@ -1854,6 +1857,16 @@
       h1.hero-name {
         font-size: clamp(3.4rem, 18vw, 5rem);
       }
+      /* Shorter, tighter eyebrow so it wraps to fewer lines — #hero is
+         bottom-anchored, so a shorter block here clears the console above it */
+      .hero-eyebrow {
+        font-size: .64rem;
+        letter-spacing: .14em;
+        margin-bottom: 1.15rem;
+      }
+      /* Shorter tiles so the console's total height clears the nav bar
+         above and the eyebrow below with margin to spare */
+      .hc-tile { aspect-ratio: 16 / 6.2; }
       .sp-wrap {
         padding: 2.5rem 0 2.85rem;
       }
