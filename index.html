@@ -2106,17 +2106,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid0">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=W_Gdi5RpYgI&t=52s"
-                data-poster="portfolio-images/unherd-tv-cover.webp"
-                src="https://www.youtube-nocookie.com/embed/W_Gdi5RpYgI?start=52&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="UnHerd TV clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/unherd-tv-cover.webp">
+                <source src="videos/unherd-tv-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2156,17 +2148,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid2">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=7UK6KuBaGTM&t=158s"
-                data-poster="portfolio-images/coffee-house-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/7UK6KuBaGTM?start=158&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Coffee House clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/coffee-house-cover.jpg">
+                <source src="videos/coffee-house-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2206,17 +2190,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid4">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=T9bOHy0GmrU&t=1050s"
-                data-poster="portfolio-images/reality-check-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/T9bOHy0GmrU?start=1050&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Reality Check Set 2 clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/reality-check-cover.jpg">
+                <source src="videos/reality-check-set2-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2231,17 +2207,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid5">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=NEB8e049osk"
-                data-poster=""
-                src="https://www.youtube-nocookie.com/embed/NEB8e049osk?autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Private Hire clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata">
+                <source src="videos/private-hire-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2256,17 +2224,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid6">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=_P3w2cPyqmA&t=861s"
-                data-poster="portfolio-images/edition-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/_P3w2cPyqmA?start=861&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Edition clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/edition-cover.jpg">
+                <source src="videos/edition-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2654,6 +2614,7 @@
     const prevBtn     = document.getElementById('spPrev');
     const nextBtn     = document.getElementById('spNext');
     const slideEmbeds = Array.from(slides, sl => sl.querySelector('iframe[data-youtube-embed]'));
+    const slideVideos = Array.from(slides, sl => sl.querySelector('video'));
     const rig         = document.getElementById('spRig');
     const turn        = document.getElementById('spTurn');
     const wallEls     = {};
@@ -2681,6 +2642,16 @@
         if (!iframe) return;
         if (!iframe.dataset.embedSrc) iframe.dataset.embedSrc = iframe.src;
         iframe.src = idx === i ? iframe.dataset.embedSrc : 'about:blank';
+      });
+      // Play the active slide's self-hosted clip, pause and rewind the rest
+      slideVideos.forEach((vid, idx) => {
+        if (!vid) return;
+        if (idx === i) {
+          vid.currentTime = 0;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
       });
       // Leaving the Edition turntable: fold the animation's current rotation
       // into the rig heading so the next spin continues without a jump.
