@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>Oscar Bicket — Digital Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1471,7 +1472,7 @@
     .sp-wrap[data-show="3"] .sp3-set[data-for="3"],
     .sp-wrap[data-show="4"] .sp3-set[data-for="4"],
     .sp-wrap[data-show="5"] .sp3-set[data-for="5"],
-    .sp-wrap[data-show="6"] .sp3-set:not(.sp3-set-alt) {
+    .sp-wrap[data-show="6"] .sp3-set[data-for="6"] {
       opacity: 1;
       transform: scale(1);
     }
@@ -1793,6 +1794,9 @@
       .sp-show-copy { min-height: 74px; }
       .sp-meta { padding-right: 5.2rem; }
       .sp-show-name { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+      /* Stack the paywall demo videos — side-by-side columns wrap and
+         crowd the header/badge below ~600px */
+      .vp-screens { grid-template-columns: 1fr; }
     }
 
     /* ── Other work grid ── */
@@ -1853,6 +1857,16 @@
       h1.hero-name {
         font-size: clamp(3.4rem, 18vw, 5rem);
       }
+      /* Shorter, tighter eyebrow so it wraps to fewer lines — #hero is
+         bottom-anchored, so a shorter block here clears the console above it */
+      .hero-eyebrow {
+        font-size: .64rem;
+        letter-spacing: .14em;
+        margin-bottom: 1.15rem;
+      }
+      /* Shorter tiles so the console's total height clears the nav bar
+         above and the eyebrow below with margin to spare */
+      .hc-tile { aspect-ratio: 16 / 6.2; }
       .sp-wrap {
         padding: 2.5rem 0 2.85rem;
       }
@@ -2034,6 +2048,7 @@
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="3" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
                         <span class="sp3-set sp3-set-text sp3-set-alt" data-for="5">Private Hire</span>
+                        <span class="sp3-set" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2042,6 +2057,7 @@
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="2" style="--img:url('portfolio-images/coffee-house-cover.jpg')"></span>
                         <span class="sp3-set sp3-set-alt" data-for="4" style="--img:url('portfolio-images/reality-check-cover.jpg')"></span>
+                        <span class="sp3-set" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2049,6 +2065,7 @@
                     <div class="sp3-wall sp3-w-front" style="--w:175px; --tx:220px; --tz:160px; --ry:180deg">
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="1" style="--img:url('portfolio-images/qright-cover.webp')"></span>
+                        <span class="sp3-set" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2059,6 +2076,7 @@
                     <div class="sp3-wall sp3-w-lv" style="--w:70px; --tx:0px; --tz:113px; --ry:90deg">
                       <div class="sp3-wall-in">
                         <span class="sp3-set" data-for="0" style="--img:url('portfolio-images/unherd-tv-cover.webp')"></span>
+                        <span class="sp3-set" data-for="6" style="--img:url('portfolio-images/edition-cover.jpg')"></span>
                         <span class="sp3-spot"></span>
                       </div>
                     </div>
@@ -2101,17 +2119,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid0">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=W_Gdi5RpYgI&t=52s"
-                data-poster="portfolio-images/unherd-tv-cover.webp"
-                src="https://www.youtube-nocookie.com/embed/W_Gdi5RpYgI?start=52&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="UnHerd TV clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/unherd-tv-cover.webp">
+                <source src="videos/unherd-tv-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2126,17 +2136,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid1">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=CrSQguQFqkY&t=757s"
-                data-poster="portfolio-images/qright-cover.webp"
-                src="https://www.youtube-nocookie.com/embed/CrSQguQFqkY?start=757&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Quite Right clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/qright-cover.webp">
+                <source src="videos/quite-right-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2151,17 +2153,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid2">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=7UK6KuBaGTM&t=158s"
-                data-poster="portfolio-images/coffee-house-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/7UK6KuBaGTM?start=158&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Coffee House clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/coffee-house-cover.jpg">
+                <source src="videos/coffee-house-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2176,17 +2170,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid3">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=oi0YHJxQsiI&t=602s"
-                data-poster="portfolio-images/reality-check-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/oi0YHJxQsiI?start=602&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Reality Check clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/reality-check-cover.jpg">
+                <source src="videos/reality-check-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2201,17 +2187,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid4">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=T9bOHy0GmrU&t=1050s"
-                data-poster="portfolio-images/reality-check-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/T9bOHy0GmrU?start=1050&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Reality Check Set 2 clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/reality-check-cover.jpg">
+                <source src="videos/reality-check-set2-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2226,17 +2204,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid5">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=NEB8e049osk"
-                data-poster=""
-                src="https://www.youtube-nocookie.com/embed/NEB8e049osk?autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Private Hire clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata">
+                <source src="videos/private-hire-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2251,17 +2221,9 @@
               </div>
             </div>
             <div class="sp-video" id="spVid6">
-              <iframe
-                data-youtube-embed="true"
-                data-fallback-url="https://www.youtube.com/watch?v=_P3w2cPyqmA&t=861s"
-                data-poster="portfolio-images/edition-cover.jpg"
-                src="https://www.youtube-nocookie.com/embed/_P3w2cPyqmA?start=861&autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&cc_load_policy=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1"
-                title="Edition clip"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen>
-              </iframe>
+              <video muted loop playsinline preload="metadata" poster="portfolio-images/edition-cover.jpg">
+                <source src="videos/edition-clip.mp4" type="video/mp4">
+              </video>
             </div>
           </div>
 
@@ -2649,6 +2611,7 @@
     const prevBtn     = document.getElementById('spPrev');
     const nextBtn     = document.getElementById('spNext');
     const slideEmbeds = Array.from(slides, sl => sl.querySelector('iframe[data-youtube-embed]'));
+    const slideVideos = Array.from(slides, sl => sl.querySelector('video'));
     const rig         = document.getElementById('spRig');
     const turn        = document.getElementById('spTurn');
     const wallEls     = {};
@@ -2676,6 +2639,16 @@
         if (!iframe) return;
         if (!iframe.dataset.embedSrc) iframe.dataset.embedSrc = iframe.src;
         iframe.src = idx === i ? iframe.dataset.embedSrc : 'about:blank';
+      });
+      // Play the active slide's self-hosted clip, pause and rewind the rest
+      slideVideos.forEach((vid, idx) => {
+        if (!vid) return;
+        if (idx === i) {
+          vid.currentTime = 0;
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
       });
       // Leaving the Edition turntable: fold the animation's current rotation
       // into the rig heading so the next spin continues without a jump.
